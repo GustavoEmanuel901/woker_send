@@ -165,18 +165,12 @@ export default function Initial() {
 
             <ManualButton
               type="button"
-              disabled={file?.status !== 'ready'}
               onClick={() => {
-                if (file?.id !== undefined) {
-                  setFormInitialInfo({
-                    fileId: file.id,
-                    initialValues: file.extracted,
-                  });
+                  setFormInitialInfo({});
                   setCurrentPage('form');
-                }
               }}
             >
-              {file?.extracted ? 'Revisar dados e continuar' : 'Preencher cadastro manualmente'}
+              Preencher cadastro manualmente
             </ManualButton>
             {file?.status !== 'ready' && (
               <SectionDescription>Envie um currículo para iniciar o cadastro.</SectionDescription>

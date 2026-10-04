@@ -65,11 +65,6 @@ export default function UserForm() {
   const onSubmit = handleSubmit(async (values) => {
     setSubmitError('');
 
-    if (formInitialInfo?.fileId === undefined) {
-      setSubmitError('Envie um currículo antes de concluir o cadastro.');
-      return;
-    }
-
     try {
       await api.post('/users', {
         name: values.name.trim(),
@@ -77,7 +72,7 @@ export default function UserForm() {
         phone: values.phone.trim() || undefined,
         jobtitle: values.jobtitle.trim() || undefined,
         abstract: values.abstract.trim() || undefined,
-        file: { id: formInitialInfo.fileId },
+        ...(formInitialInfo?.fileId !== undefined && { file: { id: formInitialInfo.fileId } }),
       });
 
       setFormInitialInfo({
@@ -102,11 +97,6 @@ export default function UserForm() {
       </FormHeader>
 
       <FormCard onSubmit={onSubmit}>
-        {formInitialInfo?.fileId === undefined && (
-          <ErrorBanner role="alert">
-            Não há um currículo associado. Volte à página inicial e envie um arquivo.
-          </ErrorBanner>
-        )}
         {submitError && <ErrorBanner role="alert">{submitError}</ErrorBanner>}
 
         <FormGrid>
@@ -196,7 +186,7 @@ export default function UserForm() {
           <BackButton type="button" onClick={() => setCurrentPage('home')} disabled={isSubmitting}>
             Voltar
           </BackButton>
-          <PrimaryButton type="submit" disabled={isSubmitting || formInitialInfo?.fileId === undefined}>
+          <PrimaryButton type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Enviando cadastro…' : 'Concluir cadastro'}
           </PrimaryButton>
         </Actions>

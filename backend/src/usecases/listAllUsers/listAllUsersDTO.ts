@@ -4,7 +4,7 @@ export interface IListAllUsersResponseDTO {
     phone?: string  
     jobtitle?: string
     abstract?: string
-    file: {
+    file?: {
         id: number
         name: string
         url: string

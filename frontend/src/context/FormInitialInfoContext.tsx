@@ -3,7 +3,7 @@ import { createContext, useContext, useState, type ReactNode } from 'react';
 import type { ExtractedInfo } from '../components/FileList';
 
 export interface FormInitialInfo {
-  fileId: number;
+  fileId?: number;
   initialValues?: ExtractedInfo;
   confirmationEmail?: string;
 }

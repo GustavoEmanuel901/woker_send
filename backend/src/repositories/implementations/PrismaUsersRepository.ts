@@ -20,7 +20,7 @@ export class PrismaUsersRepository implements IUsersRepository {
           phone: user.phone ?? undefined,
           jobtitle: user.jobtitle ?? undefined,
           abstract: user.abstract ?? undefined,
-          file: File.restore(user.file)
+          file: user.file ? File.restore(user.file) : undefined
         })
       : null
   }
@@ -33,14 +33,16 @@ export class PrismaUsersRepository implements IUsersRepository {
         phone: user.phone,
         jobtitle: user.jobtitle,
         abstract: user.abstract,
-        file: {
-          create: {
-            name: user.file.name,
-            size: user.file.size,
-            key: user.file.key,
-            url: user.file.url
-          }
-        }
+        file: user.file
+          ? {
+              create: {
+                name: user.file.name,
+                size: user.file.size,
+                key: user.file.key,
+                url: user.file.url
+              }
+            }
+          : undefined
       },
       include: { file: true }
     })
@@ -52,7 +54,7 @@ export class PrismaUsersRepository implements IUsersRepository {
       phone: createdUser.phone ?? undefined,
       jobtitle: createdUser.jobtitle ?? undefined,
       abstract: createdUser.abstract ?? undefined,
-      file: File.restore(createdUser.file)
+      file: createdUser.file ? File.restore(createdUser.file) : undefined
     })
   }
 
@@ -69,7 +71,7 @@ export class PrismaUsersRepository implements IUsersRepository {
         phone: user.phone ?? undefined,
         jobtitle: user.jobtitle ?? undefined,
         abstract: user.abstract ?? undefined,
-        file: File.restore(user.file)
+        file: user.file ? File.restore(user.file) : undefined
       })
     )
   }

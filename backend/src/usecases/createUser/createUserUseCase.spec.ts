@@ -53,6 +53,17 @@ describe('CreateUserUseCase', () => {
     })
   })
 
+  it('creates a user without file', async () => {
+    const { sut, usersRepository, filesRepository } = makeSut()
+    usersRepository.findByEmail.mockResolvedValue(null)
+    usersRepository.save.mockResolvedValue(User.restore({ id: 9, name: 'Ana', email: 'ana@a.com' }))
+
+    const result = await sut.execute({ name: 'Ana', email: 'ana@a.com' })
+
+    expect(filesRepository.getOne).not.toHaveBeenCalled()
+    expect(result.file).toBeUndefined()
+  })
+
   it('maps missing optional fields to undefined', async () => {
     const { sut, usersRepository, filesRepository } = makeSut()
     usersRepository.findByEmail.mockResolvedValue(null)

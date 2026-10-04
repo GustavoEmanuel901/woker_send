@@ -4,7 +4,7 @@ export interface ICreateUserRequestDTO {
     phone?: string
     jobtitle?: string
     abstract?: string
-    file: {
+    file?: {
         id: number
     }
 }
@@ -16,7 +16,7 @@ export interface ICreateUserResponseDTO {
     phone?: string
     jobtitle?: string
     abstract?: string
-    file: {
+    file?: {
         id: number
         url: string;
         name: string;

@@ -14,8 +14,8 @@ model User {
   phone    String?
   jobtitle String?
   abstract String?
-  fileId   Int     @unique
-  file     File    @relation(fields: [fileId], references: [id])
+  fileId   Int?
+  file     File?   @relation(fields: [fileId], references: [id])
 
   @@map("users")
 }
@@ -27,7 +27,7 @@ model File {
   key  String
   url  String
 
-  user User?
+  users User[]
 
   @@map("files")
 }

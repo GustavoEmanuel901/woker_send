@@ -22,10 +22,13 @@ export class CreateUserUseCase {
       throw new Error('User already exists')
     }
 
-    const file = await this.filesRepository.getOne(data.file.id)
+    let file
+    if (data.file) {
+      file = await this.filesRepository.getOne(data.file.id)
 
-    if (!file) {
-      throw new Error('File not found')
+      if (!file) {
+        throw new Error('File not found')
+      }
     }
 
     const user = User.create({
@@ -59,11 +62,13 @@ export class CreateUserUseCase {
       phone: createdUser.phone ?? undefined,
       jobtitle: createdUser.jobtitle ?? undefined,
       abstract: createdUser.abstract ?? undefined,
-      file: {
-        id: createdUser.file.id,
-        name: createdUser.file.name,
-        url: createdUser.file.url
-      }
+      file: createdUser.file
+        ? {
+            id: createdUser.file.id,
+            name: createdUser.file.name,
+            url: createdUser.file.url
+          }
+        : undefined
     } as ICreateUserResponseDTO
 
     return createdUserDTO

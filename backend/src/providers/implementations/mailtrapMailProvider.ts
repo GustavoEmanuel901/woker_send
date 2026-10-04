@@ -11,10 +11,10 @@ export class MailtrapMailProvider implements IMailProvider {
   constructor () {
     this.transporter = nodemailer.createTransport({
       host: process.env.MAILTRAP_HOST,
-      port: process.env.MAILTRAP_PORT,
+      port: Number(process.env.MAILTRAP_PORT),
       auth: {
-        user: process.env.MAILTRAP_USERNAME,
-        pass: process.env.MAILTRAP_PASSWORD
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASS
       }
     })
 

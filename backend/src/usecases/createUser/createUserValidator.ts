@@ -46,7 +46,8 @@ const createUserSchema = yup.object({
         .positive('Arquivo inválido')
         .required('Arquivo é obrigatório')
     })
-    .required('Arquivo é obrigatório')
+        .default(undefined)
+        .optional()
 })
 
 export async function validateCreateUser (body: unknown): Promise<ICreateUserRequestDTO> {

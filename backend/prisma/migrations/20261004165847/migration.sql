@@ -1,0 +1,22 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- DropForeignKey
+ALTER TABLE [dbo].[users] DROP CONSTRAINT [users_fileId_fkey];
+
+-- AddForeignKey
+ALTER TABLE [dbo].[users] ADD CONSTRAINT [users_fileId_fkey] FOREIGN KEY ([fileId]) REFERENCES [dbo].[files]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

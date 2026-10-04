@@ -53,10 +53,16 @@ describe('validateCreateUser', () => {
       const errors = await errorsOf(body)
       expect(errors).toMatchObject({
         name: 'Nome é obrigatório',
-        email: 'E-mail é obrigatório',
-        file: 'Arquivo é obrigatório'
+        email: 'E-mail é obrigatório'
       })
+      expect(errors.file).toBeUndefined()
     }
+  })
+
+  it('accepts a body without file', async () => {
+    const { file, ...withoutFile } = valid
+    const result = await validateCreateUser(withoutFile)
+    expect(result.file).toBeUndefined()
   })
 
   it('validates name length', async () => {
