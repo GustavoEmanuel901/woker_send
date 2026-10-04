@@ -1,28 +1,43 @@
 /* eslint-disable no-useless-constructor */
 
 import { IUsersRepository } from '@repositories/IUsersRepository'
-import { ICreateUserRequestDTO } from './createUserDTO'
+import { IFilesRepository } from '@repositories/IFilesRepository'
+import { ICreateUserRequestDTO, ICreateUserResponseDTO } from './createUserDTO'
 import { User } from '@entities/User'
 import { IMailProvider } from '@providers/IMailProvider'
 
 export class CreateUserUseCase {
   constructor (
       private usersRepository: IUsersRepository,
+      private filesRepository: IFilesRepository,
       private emailProvider: IMailProvider
   ) {
 
   }
 
-  async execute (data: ICreateUserRequestDTO) {
+  async execute (data: ICreateUserRequestDTO): Promise<ICreateUserResponseDTO> {
     const usersAlreadyExists = await this.usersRepository.findByEmail(data.email)
 
     if (usersAlreadyExists) {
       throw new Error('User already exists')
     }
 
-    const user = User.create(data)
+    const file = await this.filesRepository.getOne(data.file.id)
 
-    await this.usersRepository.save(user)
+    if (!file) {
+      throw new Error('File not found')
+    }
+
+    const user = User.create({
+      email: data.email,
+      name: data.name,
+      file: file,
+      abstract: data.abstract,
+      jobtitle: data.jobtitle,
+      phone: data.phone
+    })
+
+    const createdUser = await this.usersRepository.save(user)
 
     this.emailProvider.sendMail({
       to: {
@@ -36,5 +51,21 @@ export class CreateUserUseCase {
       subject: 'Seja Bem vindo a plataforma',
       body: '<p>Você já pode fazer login em nossa plataforma</p>'
     })
+
+    const createdUserDTO = {
+      id: createdUser.id,
+      name: createdUser.name,
+      email: createdUser.email,
+      phone: createdUser.phone ?? undefined,
+      jobtitle: createdUser.jobtitle ?? undefined,
+      abstract: createdUser.abstract ?? undefined,
+      file: {
+        id: createdUser.file.id,
+        name: createdUser.file.name,
+        url: createdUser.file.url
+      }
+    } as ICreateUserResponseDTO
+
+    return createdUserDTO
   }
 }

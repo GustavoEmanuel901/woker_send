@@ -1,6 +1,7 @@
 
 import { Request, Response } from 'express'
 import { CreateUserUseCase } from './createUserUseCase'
+import { validateCreateUser, ValidationError } from './createUserValidator'
 
 export class CreateUserController {
   constructor (
@@ -8,16 +9,19 @@ export class CreateUserController {
   ) {}
 
   async handle (request: Request, response: Response): Promise<Response> {
-    const { name, email } = request.body
-
     try {
-      await this.CreateUserUseCase.execute({
-        name,
-        email,
-      })
+      const data = await validateCreateUser(request.body)
+      const createdUser = await this.CreateUserUseCase.execute(data)
 
-      return response.status(201).send()
+      return response.status(201).json(createdUser)
     } catch (error: any) {
+      if (error instanceof ValidationError) {
+        return response.status(422).json({
+          message: error.message,
+          errors: error.errors
+        })
+      }
+
       return response.status(400).json({
         message: error.message || 'Unexpected error.'
       })

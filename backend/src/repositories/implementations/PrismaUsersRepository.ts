@@ -25,8 +25,8 @@ export class PrismaUsersRepository implements IUsersRepository {
       : null
   }
 
-  async save (user: Omit<User, 'id'>): Promise<void> {
-    await this.prisma.user.create({
+  async save (user: Omit<User, 'id'>): Promise<User> {
+    const createdUser = await this.prisma.user.create({
       data: {
         name: user.name,
         email: user.email,
@@ -41,7 +41,18 @@ export class PrismaUsersRepository implements IUsersRepository {
             url: user.file.url
           }
         }
-      }
+      },
+      include: { file: true }
+    })
+
+    return User.restore({
+      id: createdUser.id,
+      name: createdUser.name,
+      email: createdUser.email,
+      phone: createdUser.phone ?? undefined,
+      jobtitle: createdUser.jobtitle ?? undefined,
+      abstract: createdUser.abstract ?? undefined,
+      file: File.restore(createdUser.file)
     })
   }
 

@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { mkdir, unlink, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { IStorageProvider } from '@providers/IStorageProvider'
 
@@ -15,6 +15,10 @@ export class LocalStorageProvider implements IStorageProvider {
     const baseUrl = process.env.APP_URL ?? 'http://localhost:3333'
 
     return { key, url: `${baseUrl}/uploads/${key}` }
+  }
+
+  async get (key: string): Promise<Buffer> {
+    return readFile(path.join(LOCAL_UPLOADS_DIR, path.basename(key)))
   }
 
   async delete (key: string): Promise<void> {

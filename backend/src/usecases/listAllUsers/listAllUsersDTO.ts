@@ -5,9 +5,8 @@ export interface IListAllUsersResponseDTO {
     jobtitle?: string
     abstract?: string
     file: {
+        id: number
         name: string
-        size: number
-        key: string
         url: string
     }
 }

@@ -12,4 +12,12 @@ export class PrismaFilesRepository implements IFilesRepository {
 
     return File.restore(created)
   }
+
+  async getOne(id: number): Promise<File | null> {
+    const file = await this.prisma.file.findUnique({
+      where: { id }
+    })
+
+    return file ? File.restore(file) : null
+  }
 }

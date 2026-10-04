@@ -16,5 +16,9 @@ declare namespace NodeJS {
         S3_SECRET_ACCESS_KEY?: string
         S3_FORCE_PATH_STYLE?: string
         S3_PUBLIC_URL?: string
+        OLLAMA_HOST?: string
+        OLLAMA_MODEL?: string
+        GEMINI_API_KEY?: string
+        GEMINI_MODEL?: string
     }
   }

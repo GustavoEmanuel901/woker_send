@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import path from 'node:path'
-import { DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { DeleteObjectCommand, GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { IStorageProvider } from '@providers/IStorageProvider'
 
@@ -45,6 +45,12 @@ export class S3StorageProvider implements IStorageProvider {
       console.log('Error uploading file to S3:', error)
       throw error
     }
+  }
+
+  async get (key: string): Promise<Buffer> {
+    const result = await this.client.send(new GetObjectCommand({ Bucket: this.bucket, Key: key }))
+
+    return Buffer.from(await result.Body!.transformToByteArray())
   }
 
   async delete (key: string): Promise<void> {
