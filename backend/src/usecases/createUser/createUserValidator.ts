@@ -1,4 +1,4 @@
-import * as yup from 'yup'
+﻿import * as yup from 'yup'
 import { ICreateUserRequestDTO } from './createUserDTO'
 
 export class ValidationError extends Error {
@@ -56,7 +56,7 @@ export async function validateCreateUser (body: unknown): Promise<ICreateUserReq
     if (error instanceof yup.ValidationError) {
       const errors: Record<string, string> = {}
       for (const inner of error.inner) {
-        const key = inner.path?.split('.')[0] ?? 'body'
+        const key = (inner.path || 'body').split('.')[0]
         if (!errors[key]) errors[key] = inner.message
       }
       throw new ValidationError(errors)
