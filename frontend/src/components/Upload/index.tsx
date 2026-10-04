@@ -1,6 +1,6 @@
 import Dropzone from 'react-dropzone';
 
-import { DropContainer, UploadMessage } from './styles';
+import { DropContainer, UploadHint, UploadIcon, UploadMessage } from './styles';
 
 interface UploadProps {
   onUpload: (file: File) => void;
@@ -29,18 +29,13 @@ export default function Upload({ onUpload, onError }: UploadProps) {
       {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
         <DropContainer
           {...getRootProps()}
-          className={[
-            'dropzone',
-            isDragActive && 'is-active',
-            isDragReject && 'is-rejected',
-          ]
-            .filter(Boolean)
-            .join(' ')}
+          $isDragActive={isDragActive}
+          $isDragReject={isDragReject}
         >
           <input {...getInputProps()} />
-          <span className="upload-icon" aria-hidden="true">
+          <UploadIcon aria-hidden="true">
             ↑
-          </span>
+          </UploadIcon>
           <UploadMessage>
             {isDragReject
               ? 'Esse arquivo não é aceito'
@@ -48,7 +43,7 @@ export default function Upload({ onUpload, onError }: UploadProps) {
                 ? 'Solte o PDF aqui'
                 : 'Arraste um PDF para cá ou clique para selecionar'}
           </UploadMessage>
-          <span className="upload-hint">PDF · até 5 MB</span>
+          <UploadHint>PDF · até 5 MB</UploadHint>
         </DropContainer>
       )}
     </Dropzone>

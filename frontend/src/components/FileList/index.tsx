@@ -1,6 +1,23 @@
 import { MdAutoAwesome, MdCheckCircle, MdErrorOutline, MdOpenInNew, MdPictureAsPdf } from 'react-icons/md';
 
-import { FileInfo, Preview } from './styles';
+import {
+  EmptyState,
+  Entry,
+  ErrorStatus,
+  ExtractButton,
+  ExtractedData,
+  ExtractedField,
+  FileActions,
+  FileCopy,
+  FileInfo,
+  FileLink,
+  InlineError,
+  List,
+  Preview,
+  Row,
+  Status,
+  SuccessIcon,
+} from './styles';
 
 export interface ExtractedInfo {
   name?: string;
@@ -47,34 +64,33 @@ function formatFileSize(size: number): string {
 
 export default function FileList({ files, onExtract }: FileListProps) {
   if (!files) {
-    return <p className="empty-state">Nenhum arquivo enviado ainda.</p>;
+    return <EmptyState>Nenhum arquivo enviado ainda.</EmptyState>;
   }
 
   return (
-    <ul className="file-list">
-      <li className="file-entry" key={files.clientId}>
-        <div className="file-row">
+    <List>
+      <Entry key={files.clientId}>
+        <Row>
           <FileInfo>
             <Preview aria-hidden="true">
               <MdPictureAsPdf size={21} />
             </Preview>
-            <div className="file-copy">
+            <FileCopy>
               <strong title={files.name}>{files.name}</strong>
               <span>{formatFileSize(files.size)}</span>
-            </div>
+            </FileCopy>
           </FileInfo>
 
-          <div className="file-actions">
-            {files.status === 'uploading' && <span className="status">Enviando…</span>}
+          <FileActions>
+            {files.status === 'uploading' && <Status>Enviando…</Status>}
             {files.status === 'error' && (
-              <span className="status status-error" role="status">
+              <ErrorStatus role="status">
                 <MdErrorOutline aria-hidden="true" />
                 {files.error || 'Falha no envio'}
-              </span>
+              </ErrorStatus>
             )}
             {files.status === 'ready' && files.url && (
-              <a
-                className="icon-link"
+              <FileLink
                 href={files.url}
                 target="_blank"
                 rel="noreferrer"
@@ -82,45 +98,46 @@ export default function FileList({ files, onExtract }: FileListProps) {
                 title="Abrir arquivo"
               >
                 <MdOpenInNew size={19} />
-              </a>
+              </FileLink>
             )}
             {files.status === 'ready' && (
-              <button
-                className="extract-button"
+              <ExtractButton
                 type="button"
                 disabled={files.extractionStatus === 'loading'}
                 onClick={() => onExtract(files)}
               >
                 <MdAutoAwesome aria-hidden="true" />
                 {files.extractionStatus === 'loading' ? 'Extraindo…' : 'Extrair dados'}
-              </button>
+              </ExtractButton>
             )}
             {files.extractionStatus === 'done' && (
-              <MdCheckCircle className="success-icon" size={21} aria-label="Dados extraídos" />
+              <SuccessIcon>
+                <MdCheckCircle size={21} aria-label="Dados extraídos" />
+              </SuccessIcon>
             )}
-          </div>
-        </div>
+          </FileActions>
+        </Row>
 
         {files.extractionStatus === 'error' && (
-          <p className="inline-error" role="alert">
+          <InlineError role="alert">
             {files.extractionError}
-          </p>
+          </InlineError>
         )}
 
         {files.extracted && (
-          <dl className="extracted-data">
+          <ExtractedData>
             {extractedFields.map(({ key, label }) => {
               const value = files.extracted?.[key];
               return value ? (
-                <div className="extracted-field" key={key}>
+                <ExtractedField key={key}>
                   <dt>{label}</dt>
                   <dd>{value}</dd>
-                </div>
+                </ExtractedField>
               ) : null;
             })}
-          </dl>
+          </ExtractedData>
         )}
-      </li>
-    </ul>
+      </Entry>
+    </List>
   );
 }
