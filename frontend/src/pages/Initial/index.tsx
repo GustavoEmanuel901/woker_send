@@ -113,7 +113,7 @@ export default function Initial() {
     );
 
     try {
-      const response = await api.post<unknown>(`/files/${file.id}/extract`);
+      const response = await api.get<unknown>(`/files/${file.id}/extract`);
       const payload: unknown = response.data;
       if (!isRecord(payload)) {
         throw new Error('O servidor retornou os dados extraídos em formato inválido.');

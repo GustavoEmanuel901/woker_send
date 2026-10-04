@@ -20,7 +20,7 @@ router.post('/files', upload.single('file'), (request, response) => {
   return uploadFileController.handle(request, response)
 })
 
-router.post('/files/:id/extract', (request, response) => {
+router.get('/files/:id/extract', (request, response) => {
   return extractInfoController.handle(request, response)
 })
 
