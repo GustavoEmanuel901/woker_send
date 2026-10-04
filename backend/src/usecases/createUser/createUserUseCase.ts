@@ -48,10 +48,10 @@ export class CreateUserUseCase {
         email: data.email
       },
       from: {
-        name: 'Equipe do Meu App',
+        name: 'Equipe Send Worker',
         email: 'equipe@email.com'
       },
-      subject: 'Seja Bem vindo a plataforma',
+      subject: 'Recebemos sua candidatura',
       body: '<p>Você já pode fazer login em nossa plataforma</p>'
     })
 
