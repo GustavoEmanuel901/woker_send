@@ -5,8 +5,6 @@ import {
   Entry,
   ErrorStatus,
   ExtractButton,
-  ExtractedData,
-  ExtractedField,
   FileActions,
   FileCopy,
   FileInfo,
@@ -45,14 +43,6 @@ interface FileListProps {
   files: UploadedFile | null | undefined;
   onExtract: (file: UploadedFile) => void;
 }
-
-const extractedFields: { key: keyof ExtractedInfo; label: string }[] = [
-  { key: 'name', label: 'Nome' },
-  { key: 'email', label: 'E-mail' },
-  { key: 'phone', label: 'Telefone' },
-  { key: 'jobtitle', label: 'Cargo' },
-  { key: 'abstract', label: 'Resumo' },
-];
 
 function formatFileSize(size: number): string {
   if (size < 1024 * 1024) {
@@ -122,20 +112,6 @@ export default function FileList({ files, onExtract }: FileListProps) {
           <InlineError role="alert">
             {files.extractionError}
           </InlineError>
-        )}
-
-        {files.extracted && (
-          <ExtractedData>
-            {extractedFields.map(({ key, label }) => {
-              const value = files.extracted?.[key];
-              return value ? (
-                <ExtractedField key={key}>
-                  <dt>{label}</dt>
-                  <dd>{value}</dd>
-                </ExtractedField>
-              ) : null;
-            })}
-          </ExtractedData>
         )}
       </Entry>
     </List>

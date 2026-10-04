@@ -15,7 +15,7 @@ import {
 
 export default function EndPage() {
   const { setCurrentPage } = useCurrentPage();
-  const { formInitialInfo } = useFormInitialInfo();
+  const { formInitialInfo, setFormInitialInfo } = useFormInitialInfo();
 
   return (
     <Container>
@@ -35,7 +35,11 @@ export default function EndPage() {
             ) : null}{' '}
             para conferir os próximos passos.
           </Message>
-          <BackButton type="button" onClick={() => setCurrentPage('home')}>
+          <BackButton type="button" onClick={() => {
+            setFormInitialInfo(undefined);
+            setCurrentPage('home')
+
+          }}>
             Voltar ao início
           </BackButton>
         </Confirmation>
