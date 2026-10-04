@@ -25,6 +25,7 @@ export class GeminiResumeExtractorProvider implements IResumeExtractorProvider {
 
     const response = await fetch(url, {
       method: 'POST',
+      signal: AbortSignal.timeout(Number(process.env.GEMINI_TIMEOUT_MS ?? 15000)),
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
         systemInstruction: {

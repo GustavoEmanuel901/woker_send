@@ -15,7 +15,12 @@ export class FallbackResumeExtractorProvider implements IResumeExtractorProvider
       console.warn('AI extraction failed, falling back to regex:', error)
     }
 
-    const regexResult = await this.fallback.extract(resumeText)
+    let regexResult: IUserInfoExtractDTO = {}
+    try {
+      regexResult = await this.fallback.extract(resumeText)
+    } catch (error) {
+      console.warn('Regex extraction failed:', error)
+    }
     return { ...regexResult, ...aiResult }
   }
 }
