@@ -39,14 +39,6 @@ services:
       COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS: pay-uploads
     ports:
       - "9091:9090"
-
-  ollama:
-    image: ollama/ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-
+      
 volumes:
   sqlserver_data:
-  ollama_data:
